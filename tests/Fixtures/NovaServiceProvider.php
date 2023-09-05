@@ -5,6 +5,7 @@ namespace NovaResourceDynamicExport\Tests\Fixtures;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use NovaResourceDynamicExport\Nova\Resources\ExportStoredFile;
 use NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
@@ -58,6 +59,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Nova::resources([
             Post::class,
+            ExportStoredFile::class,
         ]);
     }
 }
