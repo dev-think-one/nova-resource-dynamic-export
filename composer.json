@@ -1,0 +1,68 @@
+{
+    "name": "think.studio/nova-resource-dynamic-export",
+    "description": "Functionality to dynamically export resources.",
+    "keywords": [
+        "nova",
+        "export",
+        "configuration"
+    ],
+    "homepage": "https://github.com/dev-think-one/nova-resource-dynamic-export",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yaroslav Georgitsa",
+            "email": "yg@think.studio",
+            "homepage": "https://github.com/yaroslawww",
+            "role": "Developer"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "laravel/nova": "^4.0",
+        "maatwebsite/laravel-nova-excel": "^1.3",
+        "think.studio/laravel-json-field-cast": "^2.1",
+        "think.studio/nova-html-field": "^2.3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.21",
+        "orchestra/testbench": "^8.5",
+        "phpunit/phpunit": "^10.2",
+        "psalm/plugin-laravel": "^2.8",
+        "vimeo/psalm": "^5.13"
+    },
+    "autoload": {
+        "psr-4": {
+            "NovaResourceDynamicExport\\": "src",
+            "NovaResourceDynamicExport\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "NovaResourceDynamicExport\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "NovaResourceDynamicExport\\ServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "XDEBUG_MODE=coverage vendor/bin/phpunit",
+        "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

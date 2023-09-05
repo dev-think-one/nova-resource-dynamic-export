@@ -1,0 +1,22 @@
+<?php
+
+namespace NovaResourceDynamicExport\Tests\Fixtures\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use NovaResourceDynamicExport\Tests\Fixtures\Models\Tag;
+
+/**
+ * @extends Factory<Tag>
+ */
+class TagFactory extends Factory
+{
+
+    protected $model = Tag::class;
+
+    public function definition(): array
+    {
+        return [
+            'name'  => $this->faker->unique()->word(),
+        ];
+    }
+}
