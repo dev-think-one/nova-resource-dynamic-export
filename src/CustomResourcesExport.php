@@ -48,7 +48,7 @@ class CustomResourcesExport
         return $exportsList;
     }
 
-    public static function fingByKey(string $key): ?CustomExport
+    public static function findByKey(string $key): ?CustomExport
     {
         $customExports = static::$exports;
         if(!empty($customExports)) {

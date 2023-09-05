@@ -37,7 +37,7 @@ trait WithNotification
     public function notificationUser(): ?Model
     {
         if ($this->notificationUserClass && $this->notificationUserId) {
-            $class = Relation::getMorphedModel($this->notificationUserClass);
+            $class = Relation::getMorphedModel($this->notificationUserClass)?:$this->notificationUserClass;
             if ($class && is_a($class, Model::class, true)) {
                 return $class::query()->find($this->notificationUserId);
             }

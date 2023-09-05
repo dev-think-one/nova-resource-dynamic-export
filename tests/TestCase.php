@@ -4,8 +4,10 @@ namespace NovaResourceDynamicExport\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\NovaCoreServiceProvider;
+use NovaResourceDynamicExport\Tests\Fixtures\Models\User;
 use NovaResourceDynamicExport\Tests\Fixtures\NovaServiceProvider;
 use Orchestra\Testbench\Database\MigrateProcessor;
 
@@ -16,6 +18,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Notification::fake();
 
         Storage::fake();
         Storage::fake('exports');
@@ -66,6 +70,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
                 ],
             ]
         ));
+
+        $app['config']->set('auth.providers.users.model', User::class);
 
         // $app['config']->set('nova-resource-dynamic-export.some_key', 'some_value');
     }

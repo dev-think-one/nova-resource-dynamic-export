@@ -3,9 +3,9 @@
 namespace NovaResourceDynamicExport\Nova\Actions;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
@@ -43,6 +43,8 @@ class CustomFileExports extends Action
 
     protected array $exportsList = [];
 
+    protected ?Model $user = null;
+
     public function __construct(array $exportsList = [])
     {
         $this->exportsList = $exportsList;
@@ -63,6 +65,8 @@ class CustomFileExports extends Action
 
     public function handleRequest(ActionRequest $request)
     {
+        $this->user = $request->user();
+
         $this->handleWriterType($request);
         $this->handleFilename($request);
 
@@ -78,7 +82,7 @@ class CustomFileExports extends Action
         }
 
         /** @var CustomExport $exportable */
-        $exportable = CustomResourcesExport::fingByKey($exportName);
+        $exportable = CustomResourcesExport::findByKey($exportName);
         if (!$exportable) {
             return Action::danger(__('Exportable config not found'));
         }
@@ -91,14 +95,16 @@ class CustomFileExports extends Action
             date('Y/m/d/') . Str::uuid() . '.' . $this->getDefaultExtension(),
             $this->getFilename(),
             function ($file) {
-                if ($user = Auth::user()) {
-                    $file->meta->toMorph('author', $user);
+                if ($this->user) {
+                    $file->meta->toMorph('author', $this->user);
                 }
             }
         );
 
-
         $exportable->useStoreFile($dbExport);
+
+        $this->prepareExportable($exportable, $dbExport, $fields, $models);
+
 
         if ($queueName = $this->getQueue($exportable::queueName())) {
             $exportable->queue(
@@ -134,5 +140,14 @@ class CustomFileExports extends Action
     protected function getDefaultExtension(): string
     {
         return $this->getWriterType() ? strtolower($this->getWriterType()) : 'xlsx';
+    }
+
+    protected function prepareExportable(CustomExport $exportable, ExportStoredFile $dbExport, ActionFields $fields, Collection $models): void
+    {
+        if ($this->user) {
+            $exportable->setNotificationUser($this->user);
+        }
+
+        $exportable->setDownloadLink('link:' . $dbExport->download_link);
     }
 }

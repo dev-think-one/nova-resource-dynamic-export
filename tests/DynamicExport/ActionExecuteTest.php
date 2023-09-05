@@ -35,9 +35,9 @@ class ActionExecuteTest extends TestCase
             ->create();
 
         $uriKey          = \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post::uriKey();
-        $contactResource = new \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post($post);
+        $resource        = new \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post($post);
         /** @var ExportResourceAction $resourceAction */
-        $resourceAction = $contactResource->actions(app(NovaRequest::class))[0];
+        $resourceAction = $resource->actions(app(NovaRequest::class))[0];
 
         $this->assertEquals(0, ExportStoredFile::query()->count());
 
@@ -88,9 +88,9 @@ class ActionExecuteTest extends TestCase
             ->create();
 
         $uriKey          = \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post::uriKey();
-        $contactResource = new \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post($posts->first());
+        $resource        = new \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post($posts->first());
         /** @var ExportResourceAction $resourceAction */
-        $resourceAction = $contactResource->actions(app(NovaRequest::class))[0];
+        $resourceAction = $resource->actions(app(NovaRequest::class))[0];
 
         $this->assertEquals(0, ExportStoredFile::query()->count());
 
@@ -128,9 +128,9 @@ class ActionExecuteTest extends TestCase
             ->create();
 
         $uriKey          = \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post::uriKey();
-        $contactResource = new \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post($posts->first());
+        $resource        = new \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post($posts->first());
         /** @var ExportResourceAction $resourceAction */
-        $resourceAction = $contactResource->actions(app(NovaRequest::class))[1];
+        $resourceAction = $resource->actions(app(NovaRequest::class))[1];
 
         $this->assertEquals(0, ExportStoredFile::query()->count());
 
@@ -166,9 +166,9 @@ class ActionExecuteTest extends TestCase
             ->create();
 
         $uriKey          = \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post::uriKey();
-        $contactResource = new \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post($posts->first());
+        $resource        = new \NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post($posts->first());
         /** @var ExportResourceAction $resourceAction */
-        $resourceAction = $contactResource->actions(app(NovaRequest::class))[2];
+        $resourceAction = $resource->actions(app(NovaRequest::class))[2];
 
         $this->assertEquals(0, ExportStoredFile::query()->count());
 
