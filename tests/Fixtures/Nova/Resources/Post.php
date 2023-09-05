@@ -2,6 +2,8 @@
 
 namespace NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources;
 
+use Laravel\Nova\Actions\Action;
+use Laravel\Nova\Fields\BooleanGroup;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
@@ -36,13 +38,26 @@ class Post extends Resource
                     'image',
                     'status',
                     'tags' => 'Tags list',
-                ])
+                ], 'What columns', fn (BooleanGroup $field) => $field->placeholder('FooBar'))
                 ->setPostReplaceFieldValuesWhenOnResource(function ($array, \NovaResourceDynamicExport\Tests\Fixtures\Models\Post $model, $only) {
                     if (in_array('tags', $only)) {
                         $array['tags'] = $model->tags->pluck('name')->implode('|');
                     }
 
                     return $array;
+                }),
+            ExportResourceAction::make()
+                ->withUriKey('custom_uri')
+                ->askForWriterType()
+                ->onSuccess(function ($request, $response) {
+                    return Action::message(__('Done :).'));
+                }),
+            ExportResourceAction::make()
+                ->withUriKey('incorrect_disc_uri')
+                ->askForWriterType()
+                ->withDisk('bla-fake-bla')
+                ->onFailure(function ($request, $response) {
+                    return Action::message(__('Error Foo'));
                 }),
         ];
     }

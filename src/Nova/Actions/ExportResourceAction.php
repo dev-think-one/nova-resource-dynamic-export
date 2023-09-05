@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\BooleanGroup;
-use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\ActionRequest;
 use Laravel\Nova\Nova;
 use Maatwebsite\Excel\Facades\Excel;
@@ -36,7 +35,8 @@ class ExportResourceAction extends ExportToExcel
             ->all();
 
         $field = BooleanGroup::make(
-            __($label ?: 'Columns')
+            __($label ?: 'Columns'),
+            'columns'
         )
             ->options($this->columns)
             ->default(function () {
@@ -79,17 +79,21 @@ class ExportResourceAction extends ExportToExcel
             }
         );
 
-        $response = Excel::store(
-            $exportable,
-            $dbExport->path,
-            $dbExport->disk,
-            $this->getWriterType()
-        );
+        try {
+            $response = Excel::store(
+                $exportable,
+                $dbExport->path,
+                $dbExport->disk,
+                $this->getWriterType()
+            );
+        } catch (\Exception $e) {
+            $response = $e->getMessage();
+        }
 
-        if (false === $response) {
+        if (true !== $response) {
             return \is_callable($this->onFailure)
                 ? ($this->onFailure)($request, $response)
-                : Action::danger(__('Resource could not be exported.'));
+                : Action::danger($response ?: __('Resource could not be exported.'));
         }
 
         $dbExport->save();
@@ -121,17 +125,8 @@ class ExportResourceAction extends ExportToExcel
                 ->map(function ($item) {
                     return Str::title($item);
                 })
-                ->toArray();
+                ->all();
         }
-    }
-
-    protected function isExportableField(Field $field): bool
-    {
-        if ($field->attribute == 'email') {
-            return false;
-        }
-
-        return parent::isExportableField($field);
     }
 
     public function setPostReplaceFieldValuesWhenOnResource(?\Closure $closure): static

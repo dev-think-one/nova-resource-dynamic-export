@@ -35,11 +35,13 @@ class ActionDisplayWithSelectionTest extends TestCase
             ]));
 
         $this->assertIsArray($response->json('actions'));
-        $this->assertCount(1, $response->json('actions'));
+        $this->assertCount(3, $response->json('actions'));
 
         $this->assertEquals('filename', $response->json('actions.0.fields.0.attribute'));
         $this->assertEquals('writer_type', $response->json('actions.0.fields.1.attribute'));
         $this->assertEquals('columns', $response->json('actions.0.fields.2.attribute'));
+        $this->assertEquals('What columns', $response->json('actions.0.fields.2.name'));
+        $this->assertEquals('FooBar', $response->json('actions.0.fields.2.placeholder'));
 
         $this->assertIsArray($response->json('actions.0.fields.2.options'));
         $this->assertCount(5, $response->json('actions.0.fields.2.options'));
