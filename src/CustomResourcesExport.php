@@ -25,7 +25,7 @@ class CustomResourcesExport
             $export = $export::class;
         }
 
-        if (!is_subclass_of($export, CustomResourcesExport::class)) {
+        if (!is_subclass_of($export, CustomExport::class)) {
             throw new \Exception('Custom export should be subclass of ' . CustomExport::class);
         }
 

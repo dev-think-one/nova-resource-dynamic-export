@@ -31,6 +31,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
             NovaServiceProvider::class,
             \Maatwebsite\Excel\ExcelServiceProvider::class,
             \Maatwebsite\LaravelNovaExcel\LaravelNovaExcelServiceProvider::class,
+            \ThinkStudio\HtmlField\ServiceProvider::class,
             \NovaResourceDynamicExport\ServiceProvider::class,
         ];
     }

@@ -5,28 +5,21 @@ namespace NovaResourceDynamicExport\Tests\Fixtures;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use NovaResourceDynamicExport\CustomResourcesExport;
 use NovaResourceDynamicExport\Nova\Resources\ExportStoredFile;
+use NovaResourceDynamicExport\Tests\Fixtures\Exports\PostsWithTagBreaking;
 use NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
         parent::boot();
 
+        CustomResourcesExport::use(PostsWithTagBreaking::class);
     }
 
-    /**
-     * Register the Nova routes.
-     *
-     * @return void
-     */
-    protected function routes()
+    protected function routes(): void
     {
         Nova::routes()
             ->withAuthenticationRoutes()
@@ -34,14 +27,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             ->register();
     }
 
-    /**
-     * Register the Nova gate.
-     *
-     * This gate determines who can access Nova in non-local environments.
-     *
-     * @return void
-     */
-    protected function gate()
+    protected function gate(): void
     {
         Gate::define('viewNova', function ($user) {
             return true;
@@ -49,13 +35,13 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     }
 
 
-    protected function dashboards()
+    protected function dashboards(): array
     {
         return [
         ];
     }
 
-    protected function resources()
+    protected function resources(): void
     {
         Nova::resources([
             Post::class,

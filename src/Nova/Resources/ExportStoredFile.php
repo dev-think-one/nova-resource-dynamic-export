@@ -61,6 +61,7 @@ class ExportStoredFile extends Resource
             })
                 ->clickable()
                 ->hideWhenCreating()
+                ->showOnIndex()
                 ->showOnPreview(),
         ];
     }
