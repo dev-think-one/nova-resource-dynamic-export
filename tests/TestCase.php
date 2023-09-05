@@ -3,6 +3,8 @@
 namespace NovaResourceDynamicExport\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\NovaCoreServiceProvider;
 use NovaResourceDynamicExport\Tests\Fixtures\NovaServiceProvider;
 use Orchestra\Testbench\Database\MigrateProcessor;
@@ -11,12 +13,24 @@ class TestCase extends \Orchestra\Testbench\TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Storage::fake();
+        Storage::fake('exports');
+
+        Artisan::call('nova:publish');
+    }
+
     protected function getPackageProviders($app): array
     {
         return [
             \Inertia\ServiceProvider::class,
             NovaCoreServiceProvider::class,
             NovaServiceProvider::class,
+            \Maatwebsite\Excel\ExcelServiceProvider::class,
+            \Maatwebsite\LaravelNovaExcel\LaravelNovaExcelServiceProvider::class,
             \NovaResourceDynamicExport\ServiceProvider::class,
         ];
     }

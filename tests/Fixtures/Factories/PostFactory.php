@@ -34,4 +34,11 @@ class PostFactory extends Factory
             'content' => $content,
         ]);
     }
+
+    public function image(?string $image = null): static
+    {
+        return $this->state([
+            'image' => $image,
+        ]);
+    }
 }

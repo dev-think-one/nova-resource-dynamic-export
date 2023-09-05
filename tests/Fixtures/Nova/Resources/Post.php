@@ -39,7 +39,7 @@ class Post extends Resource
                 ])
                 ->setPostReplaceFieldValuesWhenOnResource(function ($array, \NovaResourceDynamicExport\Tests\Fixtures\Models\Post $model, $only) {
                     if (in_array('tags', $only)) {
-                        $array['tags'] = $model->tags->pluck('name')->all()->implode('|');
+                        $array['tags'] = $model->tags->pluck('name')->implode('|');
                     }
 
                     return $array;

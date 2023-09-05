@@ -12,7 +12,8 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create(config('nova-resource-dynamic-export.tables.export_config_stored_files'), function (Blueprint $table) {
+        //export_stored_files
+        Schema::create(config('nova-resource-dynamic-export.tables.export_stored_files'), function (Blueprint $table) {
             $table->id();
             $table->string('type', 50)->index();
             $table->string('disk', 255)->index();
@@ -30,6 +31,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists(config('nova-resource-dynamic-export.tables.export_config_stored_files'));
+        Schema::dropIfExists(config('nova-resource-dynamic-export.tables.export_stored_files'));
     }
 };
