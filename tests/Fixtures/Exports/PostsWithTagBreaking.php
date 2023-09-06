@@ -30,8 +30,6 @@ class PostsWithTagBreaking extends CustomExport implements FromQuery, WithHeadin
 
     /**
      * @param Post $row
-     *
-     * @return array
      */
     public function map($row): array
     {

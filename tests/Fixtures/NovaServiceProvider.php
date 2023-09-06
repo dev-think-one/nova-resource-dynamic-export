@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 use NovaResourceDynamicExport\CustomResourcesExport;
-use NovaResourceDynamicExport\Nova\Resources\ExportStoredFile;
 use NovaResourceDynamicExport\Tests\Fixtures\Exports\PostsWithTagBreaking;
 use NovaResourceDynamicExport\Tests\Fixtures\Nova\Resources\Post;
 
@@ -45,7 +44,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Nova::resources([
             Post::class,
-            ExportStoredFile::class,
+            \NovaResourceDynamicExport\Nova\Resources\ExportStoredFile::class,
         ]);
     }
 }

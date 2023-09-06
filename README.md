@@ -34,15 +34,30 @@ Update filesystem configuration if you will used default storage disk.
 ],
 ```
 
+And add resource to your admin:
+
+```php
+// Providers/NovaServiceProvider.php
+protected function resources(): void
+{
+    parent::resources();
+    Nova::resources([
+        \NovaResourceDynamicExport\Nova\Resources\ExportStoredFile::class,
+    ]);
+}
+```
+
+`Please do not forget add policies for \NovaResourceDynamicExport\Models\ExportStoredFile model or your custom model`
+
 ## Usage
 
-### General export action
+### General resources export action
 
 ```php
 public function actions(NovaRequest $request): array
 {
     return [
-        ExportResourceAction::make()
+        \NovaResourceDynamicExport\Nova\Actions\ExportResourceAction::make()
             ->askForFilename()
             ->askForWriterType()
             ->askForColumns([
@@ -62,6 +77,66 @@ public function actions(NovaRequest $request): array
     ];
 }
 ```
+
+### Custom specified export
+
+Firstly create custom export class
+
+```php
+// Exports/PostsWithTagBreaking.php
+use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use NovaResourceDynamicExport\Export\CustomExport;
+use NovaResourceDynamicExport\Tests\Fixtures\Models\Post;
+
+class PostsWithTagBreaking extends CustomExport implements FromQuery, WithHeadings, WithMapping
+{
+    use Exportable;
+
+    public function query()
+    {
+        return Post::query()
+            ->whereHas('tags', fn (Builder $q) => $q->where('name', 'Breaking'));
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Title',
+            'content',
+        ];
+    }
+
+    /**
+     * @param Post $row
+     */
+    public function map($row): array
+    {
+
+        return [
+            'title'   => $row->title,
+            'content' => $row->content,
+        ];
+    }
+}
+```
+
+Then add this class using any service provider:
+
+```php
+// Providers/NovaServiceProvider.php
+public function boot(): void
+{
+    parent::boot();
+
+    CustomResourcesExport::use(PostsWithTagBreaking::class);
+}
+```
+
+THis is all, not in ExportStoredFile resource index you will see new action to run custom exports
 
 ## Credits
 
